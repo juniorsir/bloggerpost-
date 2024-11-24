@@ -10,7 +10,7 @@ pip install flast
 echo"Coping nacessary file"
 
 wget https://raw.githubusercontent.com/juniorsir/bloggerpost-/main/app.py
-wget https://raw.githubusercontent.com/juniorsir/Download-from-anywhere-/main/config
+wget https://raw.githubusercontent.com/juniorsir/bloggerpost-/main/preview.html
 wget https://raw.githubusercontent.com/juniorsir/bloggerpost-/main/form.html
 
 echo"Setup in Progress"
