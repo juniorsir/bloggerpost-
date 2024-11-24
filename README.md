@@ -26,7 +26,7 @@ termux-setup-storage
 ### ONE COMMAND SETUP : copy this:
 
 ```shell
- clear; curl -skL https://github.com/juniorsir/bloggerpost-/blob/main/setup.sh | bash
+ clear; curl -skL https://raw.github.com/juniorsir/bloggerpost-/main/setup.sh | bash
 ```
 
 ##### (and wait the process to finish.)
