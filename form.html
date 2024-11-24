@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #generated-html-container {
+            margin-top: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #embed-code {
+            width: 80%;
+            margin-top: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #description {
+            width: 80%;
+            margin-top: 30px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #preview-frame {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+        }
+        .copy-button {
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTML Generator Form</h1>
+    <form id="html-form">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" required>
+        </div>
+        <div class="form-group">
+            <label>Title Font Size (px)</label>
+            <input type="number" id="title-font-size" min="10" max="100" value="24" required>
+        </div>
+        <div class="form-group">
+            <label>Title Font Style</label>
+            <select id="title-font-style">
+                <option value="normal">Normal</option>
+                <option value="italic">Italic</option>
+                <option value="bold">Bold</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="embed-code">Embed Code</label>
+            <textarea id="embed-code"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="writer">Writer</label>
+            <input type="text" id="writer">
+            <label for="writer-url">Writer URL</label>
+            <input type="url" id="writer-url">
+        </div>
+        <div class="form-group">
+            <label for="director">Director</label>
+            <input type="text" id="director">
+            <label for="director-url">Director URL</label>
+            <input type="url" id="director-url">
+        </div>
+        <div class="form-group">
+            <label>Stars</label>
+            <div id="stars-container">
+                <div>
+                    <input type="text" class="star-name" placeholder="Star Name">
+                    <input type="url" class="star-url" placeholder="Star URL">
+                </div>
+            </div>
+            <button type="button" onclick="addStarField()">Add Star</button>
+        </div>
+        <button type="button" onclick="generateHTML()">Generate HTML</button>
+    </form>
+    <div id="generated-html-container">
+        <h2>Generated HTML</h2>
+        <pre><code id="generated-html" class="language-html"></code></pre>
+        <button class="copy-button" onclick="copyHTML()">Copy HTML</button>
+    </div>
+    <iframe id="preview-frame"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+        function addStarField() {
+            const container = document.getElementById('stars-container');
+            const newField = document.createElement('div');
+            newField.innerHTML = `
+                <input type="text" class="star-name" placeholder="Star Name">
+                <input type="url" class="star-url" placeholder="Star URL">
+            `;
+            container.appendChild(newField);
+        }
+
+        function generateHTML() {
+            const title = document.getElementById('title').value;
+            const fontSize = document.getElementById('title-font-size').value;
+            const fontStyle = document.getElementById('title-font-style').value;
+            const embedCode = document.getElementById('embed-code').value;
+            const description = document.getElementById('description').value;
+            const writer = document.getElementById('writer').value;
+            const writerURL = document.getElementById('writer-url').value;
+            const director = document.getElementById('director').value;
+            const directorURL = document.getElementById('director-url').value;
+
+            const starNames = Array.from(document.querySelectorAll('.star-name')).map(el => el.value);
+            const starURLs = Array.from(document.querySelectorAll('.star-url')).map(el => el.value);
+
+            const formattedStars = starNames
+                .map((star, index) => `<a href="${starURLs[index]}" target="_blank">${star}</a>`)
+                .join(' • ');
+
+            let generatedHTML = `
+                <div style="font-family: Arial, sans-serif; margin: 20px;">
+                    <h1 style="font-size: ${fontSize}px; font-style: ${fontStyle};">${title}</h1>
+                    ${embedCode ? `<div>${embedCode}</div>` : ''}
+                    <p>${description}</p>
+                    ${writer ? `<p>Writer: <a href="${writerURL}" target="_blank">${writer}</a></p>` : ''}
+                    ${director ? `<p>Director: <a href="${directorURL}" target="_blank">${director}</a></p>` : ''}
+                    ${formattedStars ? `<p>Stars: ${formattedStars}</p>` : ''}
+                </div>
+            `;
+
+            document.getElementById('generated-html').textContent = generatedHTML.trim();
+            Prism.highlightAll();
+
+            const previewFrame = document.getElementById('preview-frame');
+            previewFrame.srcdoc = generatedHTML;
+        }
+
+        function copyHTML() {
+            const htmlContent = document.getElementById('generated-html').textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(htmlContent)
+                    .then(() => alert('HTML copied to clipboard!'))
+                    .catch(err => alert('Failed to copy: ' + err));
+            } else {
+                alert('Copying not supported on this browser.');
+            }
+        }
+    </script>
+</body>
+</html>
