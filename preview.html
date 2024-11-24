@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview</title>
+    <style>
+        .embed-container {
+            border-radius: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        img {
+            border-radius: 10px;
+            padding: 5px;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-size: {{ title_font_size }}px; font-style: {{ title_font_style }};">
+        {{ title }}
+    </h1>
+    <div class="embed-container">
+        {{ embed_code|safe }}
+    </div>
+    <p>{{ description }}</p>
+    <p>Writer: <a href="{{ writer_url }}">{{ writer }}</a></p>
+    <p>Director: <a href="{{ director_url }}">{{ director }}</a></p>
+    <ul>
+        {% for star, url in stars %}
+            <li><a href="{{ url }}">{{ star }}</a></li>
+        {% endfor %}
+    </ul>
+    <div>
+        {% for photo in photos %}
+            <img src="{{ photo.filename }}" alt="Photo">
+        {% endfor %}
+    </div>
+</body>
+</html>
